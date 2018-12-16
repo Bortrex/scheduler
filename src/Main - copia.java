@@ -368,8 +368,7 @@
 //
 //    public static void makeClauses(ISolver solver) throws ContradictionException {
 //
-//        //Number of clauses that will be added
-//        int nClauses = 11988;
+//         int nClauses = 11988;
 //        solver.setExpectedNumberOfClauses(nClauses);
 //
 //        /* Clause 1 : exactly one value per case */
