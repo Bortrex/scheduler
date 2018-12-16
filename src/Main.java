@@ -162,7 +162,7 @@ public class Main {
                                     clause[0] = -test1;
                                     clause[1] = -test2;
 
-                                    solver.addClause(new VecInt(clause));
+//                                    solver.addClause(new VecInt(clause));
                                 }
 
                             }
