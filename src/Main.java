@@ -147,8 +147,8 @@ public class Main {
                                 if((10*j + k)== (10*m + n) && test1 != test2)
                                 {
 //                                    System.out.format("YES j(%d) - m(%d)\n",j,m);
-//                                    System.out.format("(%d <-> %d)\n",
-//                                        -test1, -test2);
+                                    System.out.format("(%d <-> %d)\n",
+                                        -test1, -test2);
                                     clause[0] = -test1;
                                     clause[1] = -test2;
 
@@ -265,21 +265,12 @@ public class Main {
 
     private static void constraint1(int[] both, int nbClRooms, int nbTimeSlots, ISolver solver) throws ContradictionException {
 
-//        for (int i = 1; i <= 9; i++){
-//            for (int j = 1; j <= 9; j++) {
-//                int[] clause = new int[9];
-//                for (int k = 1; k <= 9; k++)
-////                    clause[k - 1] = i * 100 + j * 10 + k;
-//                    System.out.print(" "+(i * 100 + j * 10 + k));
-////                solver.addClause(new VecInt(clause));
-//            }System.out.print(" ;\n");
-//        }
 
         for (int i = 0; i < both.length; i++) {
             int[] clause = new int[nbClRooms * nbTimeSlots]; int idx = 0;
             for (int j = 1; j <= nbClRooms; j++)
-                for (int k = 1; k <= nbTimeSlots; k++) {
-                    System.out.format("-> %d  -- %d\n", (100 * both[i] + 10 * j + k), (idx));
+                for (int k = 1; k <= nbTimeSlots; k++) {int x = both.length - i -1;
+//                    System.out.format("-> %d  -- %d\n", (100 * both[i] + 10 * j + k), (idx));
                     clause[idx++] = 100 * both[i] + 10 * j + k;
                 }
 //            System.out.println(" "+clause.length);
