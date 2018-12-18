@@ -3,6 +3,7 @@ import org.sat4j.minisat.SolverFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
@@ -52,10 +53,30 @@ public class Main {
         {
             System.out.println("\n\tSatisfiable Schedule.");
             printSchedule(problem.model());
+            printSchedule(problem.model(), output);
 
         } else {
             System.out.println("Unsatisfiable Schedule.");
         }
+    }
+
+    private static void printSchedule(int[] model, String file) {
+        try {
+            PrintWriter outFile = new PrintWriter(file, "UTF-8");
+            for (int i = 0; i < model.length; i++) {
+                if (model[i]>0){
+                    //System.out.print(" " + model[i]);
+
+                    outFile.print(String.valueOf(model[i]).
+                            replace("", " ").trim());
+
+                outFile.print("\n");}
+            }
+            outFile.close();
+        } catch (Exception e) {
+            return;
+        }
+
     }
 
     private static void printSchedule(int[] model) {
@@ -77,24 +98,14 @@ public class Main {
 
 
 
-        for (int i = 0; i < a.length; i++) {
-            for (int j = 0; j < a[i].length; j++) {
-                System.out.print(a[i][j] + " ");
-            }
-            System.out.println();
-
-        }
-
-//        for (int i = 1; i <= 9; i++)
-//            for (int j = 1; j <= 9; j++) {
-//                int[] clause = new int[9];
-//                for (int k = 1; k <= 9; k++) {
-//                    clause[k - 1] = i * 100 + j * 10 + k;
-//                    System.out.print((i * 100 + j * 10 + k) + " ");
-//                }
-//
-//
+//        for (int i = 0; i < a.length; i++) {
+//            for (int j = 0; j < a[i].length; j++) {
+//                System.out.print(a[i][j] + " ");
 //            }
+//            System.out.println();
+//
+//        }
+
     }
 
     private static void makeClauses(ISolver solver, int[][] a) throws ContradictionException {
@@ -115,8 +126,8 @@ public class Main {
 //        solver.setExpectedNumberOfClauses(nbClauses);
 
         constraint1(crsTeachers, nbClRooms, nbTimeSlots, solver);
-//        constraint2(crsTeachers, nbClRooms, nbTimeSlots, solver);
-//        constraint3(crsTeachers, nbClRooms, nbTimeSlots, solver);
+        constraint2(crsTeachers, nbClRooms, nbTimeSlots, solver);
+//        constraint3(crsTeachers, nbClRooms, nbTimeSlots, solver); //UnSatisfiable Schedule.
         constraint4(crsTeachers, nbClRooms, nbTimeSlots, solver);
 
 
@@ -144,26 +155,26 @@ public class Main {
 //                                System.out.format("(%d <-> %d)\n",
 //                                        test1, test2);
 //                                if(j == m && test1 != test2)
-                                if((10*j + k)== (10*m + n) && test1 != test2)
+                                if((10*j + k) == (10*m + n) && test1 != test2) //  1123 2222 3121 4213 5312 6211
                                 {
 //                                    System.out.format("YES j(%d) - m(%d)\n",j,m);
-                                    System.out.format("(%d <-> %d)\n",
-                                        -test1, -test2);
+//                                    System.out.format("(%d <-> %d)\n",
+//                                        -test1, -test2);
                                     clause[0] = -test1;
                                     clause[1] = -test2;
 
                                     solver.addClause(new VecInt(clause));
                                 }
-                                else if ( k == n && test1 != test2 )
-                                {
-//                                    System.out.println("YES k - n");
-//                                    System.out.format("(%d <-> %d)\n",
-//                                            test1, test2);
-                                    clause[0] = -test1;
-                                    clause[1] = -test2;
-
-//                                    solver.addClause(new VecInt(clause));
-                                }
+//                                else if ( k == n && test1 != test2 )
+//                                {
+////                                    System.out.println("YES k - n");
+////                                    System.out.format("(%d <-> %d)\n",
+////                                            test1, test2);
+//                                    clause[0] = -test1;
+//                                    clause[1] = -test2;
+//
+////                                    solver.addClause(new VecInt(clause));
+//                                }
 
                             }
                         }
@@ -229,38 +240,24 @@ public class Main {
 //                        System.out.format("(%d <-> %d)\n",(-(i * 100 + j * 10 + k)),(-(i * 100 + j * 10 + m)));
 //                        //solver.addClause(new VecInt(clause));
 //                    }
-
         for (int i = 0; i < both.length; i++) {
-//            int[] clause = new int[nbClRooms * nbTimeSlots];
-            int idx = 0;
+
             for (int j = 1; j <= nbClRooms; j++)
                 for (int k = 1; k <= nbTimeSlots; k++) {
-                    int idx2 = 0;
+                    int test1 = 100 * both[i] + 10 * j + k;
+                    for (int l = 1; l <= nbClRooms ; l++)
+                        for (int m = k+1; m <= nbTimeSlots; m++) {
+                            int test2 = 100 * both[i] + 10 * l + m;
+//                            System.out.format("(%d <-> %d)\n",(test1),(test2));
+                            int[] clause = new int[2];
+                            clause[0] = -(100 * both[i] + 10 * j + k);
+                            clause[1] = -(100 * both[i] + 10 * l + m);
+                            solver.addClause(new VecInt(clause));
+                        }
 
-//                    for (int x = 0; x < both.length; x++)
-                    {
-                        for (int l = j; l <= nbClRooms; l++)
-                            for (int m = k + 1; m <= nbTimeSlots; m++) {
-
-//                                if (j == l)
-                                {
-                                    int[] clause = new int[2];
-                            System.out.format("(%d <-> %d)\n",
-                                    //(-(i * 100 + j * 10 + k)),
-                                    (-(100 * both[i] + 10 * j + k)),
-                                    (-(100 * both[i] + 10 * l + m)));
-//                                    (-(i * 100 + j * 10 + m)));
-
-                                    clause[0] = -(100 * both[i] + 10 * j + k);
-                                    clause[1] = -(100 * both[i] + 10 * l + m);
-
-                                    solver.addClause(new VecInt(clause));
-
-                                }
-                            }
-                    }
                 }
         }
+
     }
 
     private static void constraint1(int[] both, int nbClRooms, int nbTimeSlots, ISolver solver) throws ContradictionException {
@@ -269,7 +266,7 @@ public class Main {
         for (int i = 0; i < both.length; i++) {
             int[] clause = new int[nbClRooms * nbTimeSlots]; int idx = 0;
             for (int j = 1; j <= nbClRooms; j++)
-                for (int k = 1; k <= nbTimeSlots; k++) {int x = both.length - i -1;
+                for (int k = 1; k <= nbTimeSlots; k++) {
 //                    System.out.format("-> %d  -- %d\n", (100 * both[i] + 10 * j + k), (idx));
                     clause[idx++] = 100 * both[i] + 10 * j + k;
                 }
