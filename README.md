@@ -5,4 +5,4 @@ Solve teachers scheduling problem using [Sat4J](http://sat4j.org/allabout.php) S
 
 ## Authors
 
-- Your Name – [@Bortrex](https://github.com/Bortrex)
+– [@Bortrex](https://github.com/Bortrex)
