@@ -3,6 +3,6 @@
 Solve teachers scheduling problem using [Sat4J](http://sat4j.org/allabout.php) SAT-Solver.
 
 
-## Authors
+## Author
 
 – [@Bortrex](https://github.com/Bortrex)
